@@ -1486,6 +1486,12 @@ void GFX_Events() {
 	// check for home button
 	u32 btns;
 	u16 btns_gc;
+
+	// Very important to update/scan the current pad/button states.
+	// Otherwise on newer libogc versions the button states are not updated.
+	WPAD_ScanPads();
+	PAD_ScanPads();
+
 	for(int i=0; i<4; i++)
 	{
 		btns = WPAD_ButtonsHeld(i);
