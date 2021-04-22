@@ -14,6 +14,7 @@
 #include <string.h>
 #include <wiiuse/wpad.h>
 #include <sys/stat.h>
+#include <sys/param.h>
 #include <unistd.h>
 
 #include "libwiigui/gui.h"

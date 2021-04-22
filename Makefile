@@ -9,6 +9,11 @@ endif
 
 include $(DEVKITPPC)/wii_rules
 
+# override the bin2o definition for disable header creation
+define bin2o
+	bin2s -a 32 $< | $(AS) -o $(<F).o
+endef
+
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
@@ -37,7 +42,7 @@ LDFLAGS		=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # any extra libraries we wish to link with
 #---------------------------------------------------------------------------------
 LIBS	:=	-lSDL -lfat -lwiiuse -lbte -lasnd -logc -lwiikeyboard \
-			-lpng -lvorbisidec -lfreetype -lz
+			-lpng -lvorbisidec -logg -lfreetype -lbz2 -lz
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -91,7 +96,7 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC) -I$(LIBOGC_INC)/SDL -I$(PORTLIBS)/include/freetype2
+					-I$(LIBOGC_INC) -I$(PORTLIBS_PATH)/wii/include/SDL -I$(PORTLIBS_PATH)/ppc/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
