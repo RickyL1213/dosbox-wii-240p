@@ -1446,6 +1446,7 @@ void GFX_Events() {
 	// Very important to update/scan the current pad/button states.
 	// Otherwise on newer libogc versions the button states are not updated.
 	WPAD_ScanPads();
+	PAD_ScanPads();
 
 	for(int i=0; i<4; i++)
 	{
