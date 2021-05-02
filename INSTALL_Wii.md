@@ -105,7 +105,7 @@ Does also install there dependencies: ppc-libogg
 
 Currently the SDL Wii port **can't** be installed per dkp-pacman! **Don't** install the package wii-sdl.
 
-The reason is this. Dosbox Wii currently uses functions from the SDL library that are not officially provided with header files. These functions are WII_AudioStart(), WII_AudioStop(), WII_VideoStart() and WII_VideoStop() and used in src/platform/wii/wiihardware.cpp. The wii-sdl package doesn't provide export these functions. This results in undefined references at linking. To prevent this the library from github should be used. The current version from the master branch https://github.com/dborth/sdl-wii works fine. It also exports the functions WII_AudioStart(), WII_AudioStop(), WII_VideoStart() and WII_VideoStop() (A header file is not provided for these functions. This is no problem because src/platform/wii/wiihardware.cpp make its own prototyp declarations for these functions.)
+The reason is this. Dosbox Wii currently uses functions from the SDL library that are not officially provided with header files. These functions are WII_AudioStart(), WII_AudioStop(), WII_VideoStart() and WII_VideoStop() and used in src/platform/wii/wiihardware.cpp. The wii-sdl package doesn't provide export these functions. This results in undefined references at linking. To prevent this the library from github should be used. The current version from the master branch https://github.com/retro100/sdl-wii works fine. It also exports the functions WII_AudioStart(), WII_AudioStop(), WII_VideoStart() and WII_VideoStop() (A header file is not provided for these functions. This is no problem because src/platform/wii/wiihardware.cpp make its own prototyp declarations for these functions.)
 
 ## Compilation and installation of SDL Wii
 
@@ -116,6 +116,12 @@ Install git which is needed to check out the source code of SDL Wii.
 ```
 
 Checkout SDL Wii.
+
+```
+~$ git clone https://github.com/retro100/sdl-wii.git
+```
+
+or use the dborth/sdl-wii repo (if the changes from retro100 are already applied at github)
 
 ```
 ~$ git clone https://github.com/dborth/sdl-wii.git

@@ -19,6 +19,7 @@ A port of DOSBox to the Wii using SDL Wii.
 * Home menu with:
     * On-screen keyboard
     * Increase/decrease cycles and frameskip
+    * Virtual console for showing logs/messages from DOSBox
 
 -=[ Performance on Wii and vWii ]=-
 
