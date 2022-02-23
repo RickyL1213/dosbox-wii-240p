@@ -29,6 +29,14 @@ extern void WII_AudioStart();
 extern void WII_AudioStop();
 extern void WII_VideoStart();
 extern void WII_VideoStop();
+extern void WII_SetRotation(int rot);
+extern void WII_SetFilter(BOOL filter);
+extern void WII_ChangeSquare(int xscale, int yscale, int xshift, int yshift);
+extern void WII_SetPreRenderCallback(void (*cb)(void));
+extern void WII_SetDefaultVideoMode();
+extern void WII_SetStandardVideoMode(int xscale, int yscale, int width);
+extern void WII_SetDoubleStrikeVideoMode(int xscale, int yscale, int width);
+extern void WII_SetWidescreen(int wide);
 }
 
 void MAPPER_CheckEvent(SDL_Event * event);
@@ -66,7 +74,7 @@ static void * PressKeys (void *arg)
 	SDL_Event event;
 	int shift;
 	u16 i;
-	
+
 	memset(shiftkey, 0, sizeof(shiftkey));
 	shiftkey[33] = 49;
 	shiftkey[34] = 39;
@@ -100,7 +108,7 @@ static void * PressKeys (void *arg)
 				dosboxCommand[i] += 32;
 				shift = 1;
 			}
-			else if(dosboxCommand[i] > 0 && dosboxCommand[i] < 130 && 
+			else if(dosboxCommand[i] > 0 && dosboxCommand[i] < 130 &&
 					shiftkey[(int)dosboxCommand[i]] > 0)
 			{
 				dosboxCommand[i] = shiftkey[(int)dosboxCommand[i]];
@@ -114,7 +122,7 @@ static void * PressKeys (void *arg)
 				MAPPER_CheckEvent(&event);
 				usleep(600);
 			}
-			
+
 			// hack to allow mappings of SDL keys > 127
 			int keyoffset = 0;
 			if(dosboxCommand[i] >= 14 && dosboxCommand[i] <= 25)
@@ -196,7 +204,7 @@ void USBGeckoOutput()
 {
 	LWP_MutexInit(&gecko_mutex, false);
 	gecko = usb_isgeckoalive(1);
-	
+
 	devoptab_list[STD_OUT] = &gecko_out;
 	devoptab_list[STD_ERR] = &gecko_out;
 }
@@ -215,6 +223,8 @@ void WiiInit()
 	InitFreeType((u8*)font_ttf, font_ttf_size);
 	LWP_CreateThread (&keythread, PressKeys, NULL, NULL, 0, 65);
 	appPath[0] = 0;
+	// wide screen not tested
+	WII_SetDoubleStrikeVideoMode(640 >> 1, 480 >> 2, 640);
 }
 
 void CreateAppPath(char origpath[])
@@ -246,15 +256,15 @@ void WiiMenu()
 	// wait for thread to finish
 	while(!LWP_ThreadIsSuspended(keythread))
 		usleep(100);
-	
+
 	WII_VideoStop();
 	SwitchAudioMode(1);
 
 	HomeMenu();
-	
+
 	WII_VideoStart();
 	SwitchAudioMode(0);
-	
+
 	if(dosboxCommand[0] != 0)
 		LWP_ResumeThread(keythread);
 }

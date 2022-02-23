@@ -23,7 +23,10 @@ SOURCES		:=	src src/cpu src/debug src/dos src/fpu src/gui \
 				src/misc src/platform/wii src/platform/wii/fonts \
 				src/platform/wii/images src/platform/wii/libwiigui \
 				src/platform/wii/sounds src/shell
-INCLUDES 	:=  include src/platform/wii
+INCLUDES 	:=  include src/platform/wii \
+				SDL/SDL/include \
+				SDL/SDL_ttf/include \
+    			SDL/SDL_image/include
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -44,7 +47,9 @@ LIBS	:=	-lSDL -lfat -lwiiuse -lbte -lasnd -logc -lwiikeyboard \
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS)
+LIBDIRS	:=  SDL/SDL/lib \
+			SDL/SDL_ttf/lib \
+    		SDL/SDL_image/lib
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -92,13 +97,16 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC) -I$(PORTLIBS_PATH)/wii/include/SDL -I$(PORTLIBS_PATH)/ppc/include/freetype2
+					-I$(LIBOGC_INC)  \
+					-I$(DEVKITPRO)/portlibs/ppc/include \
+					-I$(DEVKITPRO)/portlibs/ppc/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
 #---------------------------------------------------------------------------------
-export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
-					-L$(LIBOGC_LIB)
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(CURDIR)/$(dir)) \
+					-L$(LIBOGC_LIB) \
+					-L$(DEVKITPRO)/portlibs/ppc/lib
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 .PHONY: $(BUILD) clean
